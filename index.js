@@ -9,7 +9,15 @@ const client = new Discord.Client(
 client.login(process.env.BOT_TOKEN);
 
 client.on("ready", () => {
-    client.channels.cache.get("943496409536151572").send("I'm online 👾");
+    client.channels.cache.get(process.env.LOGS_CHANNEL).send("I'm online 👾");
+});
+
+client.on("guildMemberAdd", (member) => {
+    client.channels.cache.get(process.env.GENERAL_CHANNEL).send("Welcome " + member.toString() + " to our **" + member.guild.name + "** community 👾. You are the " + member.guild.memberCount + "° member!");
+});
+
+client.on("guildMemberRemove", (member) => {
+    client.channels.cache.get(process.env.GENERAL_CHANNEL).send("Goodbye " + member.toString() + ", come back soon 😏!");
 });
 
 client.on("messageCreate", (message) => {
@@ -17,8 +25,12 @@ client.on("messageCreate", (message) => {
         message.channel.send("I'm not ready, my creator is still programming me...");
     }
 
+    if (message.content == "-gitcode") {
+        message.channel.send("Code of the open source project: https://www.github.com/amarcvs/discordBotForGamers");
+    }
+
     if (message.content == "-botinfo") {
-        let bot = client.users.cache.get("943631560781996053");
+        let bot = client.users.cache.get(process.env.BOT_ID);
         
         let embed = new Discord.MessageEmbed()
             .setColor("#348066")
@@ -32,7 +44,11 @@ client.on("messageCreate", (message) => {
             .addField("Bot created on:", "```" + bot.createdAt.toDateString() + "```", true)
             .addField("Programmed by:", "```" + client.users.cache.get("716684672628686899").username + "```", false);
 
-        message.channel.send({ embeds: [embed] });
+        message.channel.send({ embeds: [embed] })
+            .then(function(message){
+                message.react("🎮");
+                message.react("🎲");
+            });
     }
 
     if (message.content == "-serverinfo") {
