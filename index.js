@@ -9,24 +9,39 @@ const client = new Discord.Client(
 client.login(process.env.BOT_TOKEN);
 
 client.on("ready", () => {
-    client.channels.cache.get(process.env.LOGS_CHANNEL).send("I'm online 👾");
+    //client.channels.cache.get(process.env.LOGS_CHANNEL).send("I'm online 👾");
+    
+    let text = `**${client.users.cache.get(process.env.BOT_ID).tag}** is online`;
+    writeLogs(text);
 });
 
 client.on("guildMemberAdd", (member) => {
     client.channels.cache.get(process.env.GENERAL_CHANNEL).send("Welcome " + member.toString() + " to our **" + member.guild.name + "** community 👾. You are the " + member.guild.memberCount + "° member!");
+
+    let text = `**${member.tag}** joined into the server`;
+    writeLogs(text);
 });
 
 client.on("guildMemberRemove", (member) => {
     client.channels.cache.get(process.env.GENERAL_CHANNEL).send("Goodbye " + member.toString() + ", come back soon 😏!");
+    
+    let text = `**${member.tag}** exited the server`;
+    writeLogs(text);
 });
 
 client.on("messageCreate", (message) => {
     if (message.content == "-help") {
         message.channel.send("I'm not ready, my creator is still programming me...");
+        
+        let text = `**${message.author.username}#${message.author.discriminator}** sent the -help command`;
+        writeLogs(text);
     }
 
     if (message.content == "-gitcode") {
         message.channel.send("Code of the open source project: https://www.github.com/amarcvs/discordBotForGamers");
+        
+        let text = `**${message.author.username}#${message.author.discriminator}** sent the -gitcode command`;
+        writeLogs(text);
     }
 
     if (message.content == "-botinfo") {
@@ -49,6 +64,9 @@ client.on("messageCreate", (message) => {
                 message.react("🎮");
                 message.react("🎲");
             });
+
+        let text = `**${message.author.username}#${message.author.discriminator}** sent the -botinfo command`;
+        writeLogs(text);
     }
 
     if (message.content == "-serverinfo") {
@@ -70,6 +88,9 @@ client.on("messageCreate", (message) => {
             .addField("Description:", "```" + server.description + "```", false);
 
         message.channel.send({ embeds: [embed] });
+
+        let text = `**${message.author.username}#${message.author.discriminator}** sent the -serverinfo command`;
+        writeLogs(text);
     }
 
     if (message.content.startsWith("-userinfo")) {
@@ -117,5 +138,13 @@ client.on("messageCreate", (message) => {
             .addField("Roles:", "```" + user.roles.cache.map(ruolo => ruolo.name).join("\r") + "```", false);
 
         message.channel.send({ embeds: [embed] });
+
+        let text = `**${message.author.username}#${message.author.discriminator}** sent the -userinfo command`;
+        writeLogs(text);
     }
 });
+
+function writeLogs(text) {
+    client.channels.cache.get(process.env.LOGS_CHANNEL).send(text);
+    return;
+}
