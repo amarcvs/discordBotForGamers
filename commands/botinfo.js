@@ -2,24 +2,23 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: "botinfo",
-    description: "This command shows the info about the bot.",
+    description: "This command shows some info about the bot.",
     execute(message, args) {
         let bot = client.users.cache.get(process.env.BOT_ID);
-        
+        let dev = client.users.cache.get(process.env.DEVELOPER_ID);
+
         let embed = new Discord.MessageEmbed()
             .setColor("#348066")
-            .setTitle(bot.username)
-            .setDescription(`Brain of the gaymerServer.
-                            Type -help to view all commands!
-
-                            Bot available soon...`)
+            .setAuthor({ name: bot.username, iconURL: bot.avatarURL() })
+            .setDescription(`Multipurpose bot and brain of the **${message.member.guild.name} community**.
+                            Type **-help** to view all commands!`)
             .setThumbnail(bot.avatarURL())
             .addField("Bot id:", "```" + bot.id + "```", true)
             .addField("Bot created on:", "```" + bot.createdAt.toDateString() + "```", true)
-            .addField("Programmed by:", "```" + client.users.cache.get("716684672628686899").username + "```", false);
+            .addField("Written by:", "```" + dev.username + "#" + dev.discriminator + "```", false);
 
         message.channel.send({ embeds: [embed] })
-            .then(function(message){
+            .then(function(message) {
                 message.react("🎮");
                 message.react("🎲");
             });

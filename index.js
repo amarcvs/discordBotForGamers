@@ -144,10 +144,10 @@ client.on("messageCreate", message => {
                 const member = message.member;
                 member.setNickname(`${message.member.displayName.split(" ")[0]} [${userstatsList[index].level}]`);
 
-                let channel = client.channels.cache.get(process.env.GENERAL_CHANNEL);
+                let channel = client.channels.cache.get(process.env.SCOREBOARD_CHANNEL);
                 channel.send(`${message.author.toString()} you have reached new level!`);
                 
-                let text = `**${message.author.username}#${message.author.discriminator}** have reached new level`;
+                let text = `**${message.author.username}#${message.author.discriminator}** has reached new level`;
                 writeLogs(text);
             }
 
@@ -187,6 +187,7 @@ setInterval(function () {
 }, 5000);
 
 global.writeLogs = function (text) {
-    client.channels.cache.get(process.env.LOGS_CHANNEL).send(text);
+    let date = new Date();
+    client.channels.cache.get(process.env.LOGS_CHANNEL).send(date.toUTCString() + " bot[worker .1]: " + text);
     return;
 }

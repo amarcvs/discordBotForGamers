@@ -2,8 +2,9 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: "userinfo",
-    description: "This command shows the info about a user.",
+    description: "This command shows some info about a user.",
     execute(message, args) {
+        let bot = client.users.cache.get(process.env.BOT_ID);
         let user = undefined;
         
         if (message.content == "-userinfo") {
@@ -37,8 +38,9 @@ module.exports = {
 
         let embed = new Discord.MessageEmbed()
             .setColor("#348066")
-            .setTitle(user.user.tag)
-            .setDescription("Info of this user.")
+            .setAuthor({ name: bot.username, iconURL: bot.avatarURL() })
+            .setTitle("TAG: " + user.user.tag)
+            .setDescription("Some info about this user.")
             .setThumbnail(user.user.avatarURL())
             .addField("User id:", "```" + user.user.id + "```", true)
             .addField("Account created on:", "```" + user.user.createdAt.toDateString() + "```", true)
